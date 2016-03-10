@@ -20,7 +20,7 @@
     "build": "coffee -co build src",
 
     "install": "npm run build",
-    "test": "NODE_PATH=./src mocha --compilers coffee:coffee-script/register --recursive test/harness.js -s 30000 -t 30000 test"
+    "test": "mocha --compilers coffee:coffee-script/register --recursive test/harness.js -s 30000 -t 30000 test"
   },
   "main": "build/cryptobox.js"
 }
