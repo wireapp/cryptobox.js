@@ -4,7 +4,7 @@
   "dependencies": {
     "coffee-script": "~1",
 
-    "proteus": "wireapp/proteus.js#v1.0.0"
+    "proteus": "wireapp/proteus.js#v1.0.1"
   },
   "devDependencies": {
     "mocha": "~2",
