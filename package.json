@@ -1,10 +1,10 @@
 {
   "name": "cryptobox",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "dependencies": {
     "coffee-script": "~1",
 
-    "proteus": "wireapp/proteus.js#v1.0.1"
+    "proteus": "wireapp/proteus.js#v1.0.2"
   },
   "devDependencies": {
     "mocha": "~2",
