@@ -20,49 +20,63 @@ class ReadOnlyStore extends Proteus.session.PreKeyStore
 
 module.exports = class Cryptobox
   constructor: (@store) ->
-    # XXX: no access to proteus internal funcs, replace with typescript annotation
-    # Proteus.util.TypeUtil.assert_is_instance cryptobox.CryptoboxStore, @store
+    return new Promise (resolve, reject) =>
+      # XXX: no access to proteus internal funcs, replace with typescript annotation
+      # Proteus.util.TypeUtil.assert_is_instance cryptobox.CryptoboxStore, @store
 
-    @identity = @store.load_identity()
+      @identity = @store.load_identity()
 
-    if not @identity
-      @identity = Proteus.keys.IdentityKeyPair.new()
-      @store.save_identity @identity
+      if not @identity
+        @identity = Proteus.keys.IdentityKeyPair.new()
+        @store.save_identity @identity
 
-    Object.freeze @
+      Object.freeze @
+      resolve @
 
   ###
   @param client_id [String] Client ID
   @param pre_key_bundle [ArrayBuffer] Serialized Pre-Key Bundle
   ###
   session_from_prekey: (client_id, pre_key_bundle) ->
-    bundle = Proteus.keys.PreKeyBundle.deserialise pre_key_bundle
-    pk_store = new ReadOnlyStore @store
-    session = Proteus.session.Session.init_from_prekey @identity, bundle
-    return new CryptoboxSession client_id, pk_store, session
+    return new Promise (resolve, reject) =>
+      bundle = Proteus.keys.PreKeyBundle.deserialise pre_key_bundle
+      pk_store = new ReadOnlyStore @store
+      session = Proteus.session.Session.init_from_prekey @identity, bundle
+
+      resolve new CryptoboxSession client_id, pk_store, session
 
   session_from_message: (session_id, envelope) ->
-    env = Proteus.message.Envelope.deserialise envelope
-    pk_store = new ReadOnlyStore @store
-    [session, plaintext] = Proteus.session.Session.init_from_message @identity, pk_store, env
-    return [new CryptoboxSession(session_id, pk_store, session), plaintext]
+    return new Promise (resolve, reject) =>
+      env = Proteus.message.Envelope.deserialise envelope
+      pk_store = new ReadOnlyStore @store
+      [session, plaintext] = Proteus.session.Session.init_from_message @identity, pk_store, env
+
+      resolve [new CryptoboxSession(session_id, pk_store, session), plaintext]
 
   session_load: (session_id) ->
-    session = @store.load_session @identity, session_id
-    if not session
-      return null
+    return new Promise (resolve, reject) =>
+      session = @store.load_session @identity, session_id
+      if not session
+        reject null
 
-    pk_store = new ReadOnlyStore @store
-    return new cryptobox.CryptoboxSession session_id, pk_store, session
+      pk_store = new ReadOnlyStore @store
+
+      resolve new cryptobox.CryptoboxSession session_id, pk_store, session
 
   session_save: (session) ->
-    @store.save_session session.id, session.session
+    return new Promise (resolve, reject) =>
+      @store.save_session session.id, session.session
 
-    for pk in session.pk_store.removed_prekeys
-      @store.delete_prekey pk
+      for pk in session.pk_store.removed_prekeys
+        @store.delete_prekey pk
+
+      resolve(true)
 
   session_delete: (session_id) ->
-    @store.delete_session session_id
+    return new Promise (resolve, reject) =>
+      @store.delete_session session_id
+
+      resolve(true)
 
   new_prekey: (prekey_id) ->
     return new Promise (resolve, reject) =>
