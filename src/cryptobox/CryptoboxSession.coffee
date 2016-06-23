@@ -15,12 +15,20 @@ module.exports = class CryptoboxSession
   ###
   encrypt: (plaintext) ->
     return new Promise (resolve, reject) =>
-      resolve @session.encrypt(plaintext).serialise()
+      @session.encrypt(plaintext)
+      .then (ciphertext) ->
+        resolve ciphertext.serialise()
+      .catch (e) ->
+        reject e
 
   decrypt: (ciphertext) ->
     return new Promise (resolve, reject) =>
       envelope = Proteus.message.Envelope.deserialise ciphertext
-      resolve @session.decrypt @pk_store, envelope
+      @session.decrypt @pk_store, envelope
+      .then (plaintext) ->
+        resolve plaintext
+      .catch (e) ->
+        reject e
 
   fingerprint_local: ->
     return @session.local_identity.public_key.fingerprint()

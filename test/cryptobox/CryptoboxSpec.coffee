@@ -1,7 +1,7 @@
 TestStore = require './TestStore'
 
 assert_decrypt = (expected, plaintext) ->
-  assert(expected is sodium.to_string(plaintext))
+  assert.strictEqual expected, sodium.to_string(plaintext)
 
 describe 'Basic functionality', ->
   new_store_closure = -> new TestStore
@@ -36,8 +36,8 @@ describe 'Basic functionality', ->
 
     .then (session) ->
       [bob_session, plaintext] = session
-
       assert_decrypt 'Hello Bob!', plaintext
+
       bob_cryptobox.session_save bob_session
 
     .then ->
@@ -59,6 +59,7 @@ describe 'Basic functionality', ->
       alice_cryptobox.session_load 'unknown'
 
     .catch (session) ->
+      console.log session
       assert.isNotOk(session)
 
     .then((() -> done()), (err) -> done(err))
@@ -101,9 +102,9 @@ describe 'Basic functionality', ->
 
     .then (session) ->
       bob_session = session[0]
-
       bob_cryptobox.session_save bob_session
 
+    .then ->
       # Now the prekey should be gone
       bob_cryptobox.session_from_message 'alice', hello_bob
 
@@ -148,6 +149,7 @@ describe 'Basic functionality', ->
       assert_decrypt 'Hello Bob!', plaintext
       bob_cryptobox.session_save bob_session
 
+    .then ->
       # Bob's last prekey is not removed
       bob_cryptobox.session_from_message 'alice', hello_bob
 

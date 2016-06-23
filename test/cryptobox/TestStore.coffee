@@ -5,36 +5,46 @@ module.exports = class TestStore extends cryptobox.CryptoboxStore
     @prekeys = {}
 
   load_identity: ->
-    return @identity
+    return new Promise (resolve, reject) =>
+      resolve @identity
 
   save_identity: (identity) ->
-    @identity = identity
+    return new Promise (resolve, reject) =>
+      @identity = identity
+      resolve()
 
   load_session: (identity, session_id) ->
-    serialised = @sessions[session_id]
-    if not serialised
-      return undefined
+    return new Promise (resolve, reject) =>
+      serialised = @sessions[session_id]
+      if not serialised
+        resolve undefined
 
-    return Proteus.session.Session.deserialise identity, serialised
+      resolve Proteus.session.Session.deserialise identity, serialised
 
   save_session: (session_id, session) ->
-    @sessions[session_id] = session.serialise()
+    return new Promise (resolve, reject) =>
+      @sessions[session_id] = session.serialise()
+      resolve()
 
   delete_session: (session_id) ->
-    delete @sessions[session_id]
+    return new Promise (resolve, reject) =>
+      delete @sessions[session_id]
+      resolve()
 
   add_prekey: (prekey) ->
-    # Proteus.util.TypeUtil.assert_is_instance Proteus.keys.PreKey, prekey
-
-    @prekeys[prekey.key_id] = prekey.serialise()
-    return new Promise (resolve, reject) => resolve true
+    return new Promise (resolve, reject) =>
+      @prekeys[prekey.key_id] = prekey.serialise()
+      resolve()
 
   load_prekey: (prekey_id) ->
-    serialised = @prekeys[prekey_id]
-    if not serialised
-      return undefined
+    return new Promise (resolve, reject) =>
+      serialised = @prekeys[prekey_id]
+      if not serialised
+        resolve undefined
 
-    return Proteus.keys.PreKey.deserialise serialised
+      resolve Proteus.keys.PreKey.deserialise serialised
 
   delete_prekey: (prekey_id) ->
-    delete @prekeys[prekey_id]
+    return new Promise (resolve, reject) =>
+      delete @prekeys[prekey_id]
+      resolve()
