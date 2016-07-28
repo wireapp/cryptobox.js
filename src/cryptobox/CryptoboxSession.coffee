@@ -32,11 +32,21 @@ module.exports = class CryptoboxSession
   @return [ArrayBuffer] CBOR representation of a message envelope which holds the encrypted text
   ###
   encrypt: (plaintext) ->
-    return @session.encrypt(plaintext).serialise()
+    return new Promise (resolve, reject) =>
+      @session.encrypt(plaintext)
+      .then (ciphertext) ->
+        resolve ciphertext.serialise()
+      .catch (e) ->
+        reject e
 
   decrypt: (ciphertext) ->
-    envelope = Proteus.message.Envelope.deserialise ciphertext
-    return @session.decrypt @pk_store, envelope
+    return new Promise (resolve, reject) =>
+      envelope = Proteus.message.Envelope.deserialise ciphertext
+      @session.decrypt @pk_store, envelope
+      .then (plaintext) ->
+        resolve plaintext
+      .catch (e) ->
+        reject e
 
   fingerprint_local: ->
     return @session.local_identity.public_key.fingerprint()
