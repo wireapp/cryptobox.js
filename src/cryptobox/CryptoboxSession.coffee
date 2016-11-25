@@ -1,4 +1,4 @@
-Proteus = require 'proteus'
+Proteus = require 'wire-webapp-proteus'
 
 module.exports = class CryptoboxSession
   ###

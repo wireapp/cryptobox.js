@@ -1,20 +1,19 @@
 {
   "name": "cryptobox",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "dependencies": {
     "coffee-script": "~1",
-    "proteus": "wireapp/proteus.js#v1.0.4"
+    "wire-webapp-proteus": "1.0.6"
   },
   "devDependencies": {
     "mocha": "~2",
     "chai": "~3"
   },
-  "license": "LicenseRef-LICENSE",
+  "license": "GPL-3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/wireapp/cryptobox.js.git"
   },
-  "private": true,
   "scripts": {
     "build": "coffee -co build src",
     "install": "npm run build",
