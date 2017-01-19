@@ -22,3 +22,7 @@ Run the following in your terminal / command shell:
 npm install
 npm test
 ```
+
+## :warning: Deprecation Notice :warning:
+
+This module is deprecated and will be soon replaced by [wire-webapp-cryptobox](https://github.com/wireapp/wire-webapp-cryptobox).
