@@ -17,11 +17,17 @@
  *
  */
 
-process.env.NODE_PATH = './src';
-require('module').Module._initPaths();
+'use strict';
 
-assert = require('chai').assert;
+module.exports = class CryptoboxStore {
+  load_identity () {}
+  save_identity (identity) {}
 
-cryptobox = require('cryptobox');
-sodium = require('libsodium');
-Proteus = require('proteus');
+  load_session (identity, session_id) {}
+  save_session (session_id, session) {}
+  delete_session (session_id) {}
+
+  load_prekey (prekey_id) {}
+  add_prekey (key) {}
+  delete_prekey (prekey_id) {}
+};

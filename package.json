@@ -3,7 +3,6 @@
   "version": "2.0.0",
   "dependencies": {
     "coffee-script": "~1",
-
     "proteus": "wireapp/proteus.js#v2.0.0"
   },
   "devDependencies": {
@@ -16,9 +15,7 @@
     "url": "git://github.com/wireapp/cryptobox.js.git"
   },
   "scripts": {
-    "build": "coffee -co build src",
-    "install": "npm run build",
-    "test": "mocha --compilers coffee:coffee-script/register --recursive test/harness.js -s 30000 -t 30000 test"
+    "test": "mocha --recursive test/harness.js -s 30000 -t 30000 test"
   },
-  "main": "build/cryptobox.js"
+  "main": "src/cryptobox.js"
 }
