@@ -189,7 +189,7 @@ describe('Basic functionality', () => {
     }).then(() => done(), (err) => done(err));
   });
 
-  return it('can delete a session', (done) => {
+  it('can delete a session', (done) => {
     let alice_cryptobox = null;
     let bob_cryptobox = null;
     let alice_session = null;
