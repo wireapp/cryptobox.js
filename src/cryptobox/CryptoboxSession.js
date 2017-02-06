@@ -27,7 +27,7 @@ module.exports = class CryptoboxSession {
    * @param pk_store [Proteus.session.PreKeyStore] Pre-key store
    * @param session [Proteus.session.Session] Proteus session
    */
-  constructor (id, pk_store, session) {
+  constructor(id, pk_store, session) {
     this.id = id;
     this.pk_store = pk_store;
     this.session = session;
@@ -38,36 +38,32 @@ module.exports = class CryptoboxSession {
    * @param plaintext [String] Text to be encrypted
    * @return [ArrayBuffer] CBOR representation of a message envelope which holds the encrypted text
    */
-  encrypt (plaintext) {
-    return new Promise ((resolve, reject) => {
-      this.session.encrypt(plaintext)
-      .then ((ciphertext) => {
+  encrypt(plaintext) {
+    return new Promise((resolve, reject) => {
+      this.session.encrypt(plaintext).then((ciphertext) => {
         resolve(ciphertext.serialise());
-      })
-      .catch ((e) => {
+      }).catch((e) => {
         reject(e);
       });
     });
   }
 
-  decrypt (ciphertext) {
-    return new Promise ((resolve, reject) => {
+  decrypt(ciphertext) {
+    return new Promise((resolve, reject) => {
       const envelope = Proteus.message.Envelope.deserialise(ciphertext);
-      this.session.decrypt(this.pk_store, envelope)
-      .then ((plaintext) => {
+      this.session.decrypt(this.pk_store, envelope).then((plaintext) => {
         resolve(plaintext);
-      })
-      .catch ((e) => {
+      }).catch((e) => {
         reject(e);
       });
     });
   }
 
-  fingerprint_local () {
+  fingerprint_local() {
     return this.session.local_identity.public_key.fingerprint();
   }
 
-  fingerprint_remote () {
+  fingerprint_remote() {
     return this.session.remote_identity.fingerprint();
   }
 };

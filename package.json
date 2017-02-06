@@ -1,15 +1,14 @@
 {
-  "name": "cryptobox",
-  "version": "2.0.0",
   "dependencies": {
-    "coffee-script": "~1",
     "proteus": "wireapp/proteus.js#v2.0.0"
   },
   "devDependencies": {
     "mocha": "~2",
     "chai": "~3"
   },
-  "license": "LicenseRef-LICENSE",
+  "license": "GPL-3.0",
+  "main": "src/cryptobox.js",
+  "name": "cryptobox",
   "repository": {
     "type": "git",
     "url": "git://github.com/wireapp/cryptobox.js.git"
@@ -17,5 +16,5 @@
   "scripts": {
     "test": "mocha --recursive test/harness.js -s 30000 -t 30000 test"
   },
-  "main": "src/cryptobox.js"
+  "version": "2.0.0"
 }

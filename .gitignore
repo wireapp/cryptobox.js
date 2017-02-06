@@ -2,6 +2,7 @@
 **/*.baseDir.ts
 .idea/**/*.xml
 !.idea/codeStyleSettings.xml
+!.idea/misc.xml
 !.idea/modules.xml
 !.idea/watcherTasks.xml
 !.idea/vcs.xml

@@ -21,27 +21,27 @@
 
 module.exports = class TestStore extends cryptobox.CryptoboxStore {
 
-  constructor () {
+  constructor() {
     super();
     this.identity = Proteus.keys.IdentityKeyPair.new();
     this.sessions = {};
     this.prekeys = {};
   }
 
-  load_identity () {
+  load_identity() {
     return new Promise((resolve, reject) => {
       return resolve(this.identity);
     });
   }
 
-  save_identity (identity) {
+  save_identity(identity) {
     return new Promise((resolve, reject) => {
       this.identity = identity;
       return resolve();
     });
   }
 
-  load_session (identity, session_id) {
+  load_session(identity, session_id) {
     return new Promise((resolve, reject) => {
       const serialised = this.sessions[session_id];
       if (!serialised) {
@@ -51,28 +51,28 @@ module.exports = class TestStore extends cryptobox.CryptoboxStore {
     });
   }
 
-  save_session (session_id, session) {
+  save_session(session_id, session) {
     return new Promise((resolve, reject) => {
       this.sessions[session_id] = session.serialise();
       return resolve();
     });
   }
 
-  delete_session (session_id) {
+  delete_session(session_id) {
     return new Promise((resolve, reject) => {
       delete this.sessions[session_id];
       return resolve();
     });
   }
 
-  add_prekey (prekey) {
+  add_prekey(prekey) {
     return new Promise((resolve, reject) => {
       this.prekeys[prekey.key_id] = prekey.serialise();
       return resolve();
     });
   }
 
-  load_prekey (prekey_id) {
+  load_prekey(prekey_id) {
     return new Promise((resolve, reject) => {
       const serialised = this.prekeys[prekey_id];
       if (!serialised) {
@@ -82,7 +82,7 @@ module.exports = class TestStore extends cryptobox.CryptoboxStore {
     });
   }
 
-  delete_prekey (prekey_id) {
+  delete_prekey(prekey_id) {
     return new Promise((resolve, reject) => {
       delete this.prekeys[prekey_id];
       return resolve();

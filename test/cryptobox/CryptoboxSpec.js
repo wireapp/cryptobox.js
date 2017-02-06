@@ -1,4 +1,3 @@
-
 /*
  * Wire
  * Copyright (C) 2016 Wire Swiss GmbH
@@ -40,61 +39,40 @@ describe('Basic functionality', () => {
     let bob_session = null;
     let plaintext = null;
 
-    return two_boxes()
-    .then((boxes) => {
+    return two_boxes().then((boxes) => {
       alice_cryptobox = boxes[0];
       bob_cryptobox = boxes[1];
       return bob_cryptobox.new_prekey(1);
-    })
-
-    .then((bob_serialized_pre_key_bundle) => {
+    }).then((bob_serialized_pre_key_bundle) => {
       return alice_cryptobox.session_from_prekey('bob_client_id', bob_serialized_pre_key_bundle);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_session.encrypt('Hello Bob!');
-    })
-
-    .then((hello_bob) => {
+    }).then((hello_bob) => {
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
       assert_decrypt('Hello Bob!', plaintext);
       return bob_cryptobox.session_save(bob_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       assert(bob_session.fingerprint_local() === alice_session.fingerprint_remote());
       assert(bob_session.fingerprint_remote() === alice_session.fingerprint_local());
       return alice_cryptobox.session_load('bob_client_id');
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return bob_cryptobox.session_load('alice');
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session;
       assert.isOk(alice_session);
       assert.isOk(bob_session);
       return alice_cryptobox.session_load('unknown');
-    })
-
-    .catch((session) => {
+    }).catch((session) => {
       console.log(session);
       return assert.isNotOk(session);
-    })
-
-    .then(() => done(), (err) => done(err));
+    }).then(() => done(), (err) => done(err));
   });
 
   it('preserves pre-keys in case of emergency', (done) => {
@@ -109,27 +87,17 @@ describe('Basic functionality', () => {
       alice_cryptobox = boxes[0];
       bob_cryptobox = boxes[1];
       return bob_cryptobox.new_prekey(1);
-    })
-
-    .then((bob_serialized_pre_key_bundle) => {
+    }).then((bob_serialized_pre_key_bundle) => {
       return alice_cryptobox.session_from_prekey('bob_client_id', bob_serialized_pre_key_bundle);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_session.encrypt('Hello Bob!');
-    })
-
-    .then((msg) => {
+    }).then((msg) => {
       hello_bob = msg;
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
 
@@ -138,27 +106,17 @@ describe('Basic functionality', () => {
       // Pretend something happened before Bob could save his session and he retries.
       // The prekey should not be removed (yet).
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       return bob_cryptobox.session_save(bob_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       // Now the prekey should be gone
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((e) => {
+    }).then((e) => {
       return assert.fail('', '', 'session_from_message should have rejected promise');
-    })
-
-    .catch((e) => {
+    }).catch((e) => {
       return assert.instanceOf(e, Proteus.errors.DecryptError.PrekeyNotFound);
-    })
-
-    .then(() => done(), (err) => done(err));
+    }).then(() => done(), (err) => done(err));
   });
 
   it('makes use of the last pre-key', (done) => {
@@ -173,44 +131,28 @@ describe('Basic functionality', () => {
       alice_cryptobox = boxes[0];
       bob_cryptobox = boxes[1];
       return bob_cryptobox.new_prekey(Proteus.keys.PreKey.MAX_PREKEY_ID);
-    })
-
-    .then((bob_serialized_pre_key_bundle) => {
+    }).then((bob_serialized_pre_key_bundle) => {
       return alice_cryptobox.session_from_prekey('bob_client_id', bob_serialized_pre_key_bundle);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_session.encrypt('Hello Bob!');
-    })
-
-    .then((msg) => {
+    }).then((msg) => {
       hello_bob = msg;
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
       assert_decrypt('Hello Bob!', plaintext);
       return bob_cryptobox.session_save(bob_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
       return assert_decrypt('Hello Bob!', plaintext);
-    })
-
-    .then(() => done(), (err) => done(err));
+    }).then(() => done(), (err) => done(err));
   });
 
   it('handles duplicated messages', (done) => {
@@ -225,42 +167,26 @@ describe('Basic functionality', () => {
       alice_cryptobox = boxes[0];
       bob_cryptobox = boxes[1];
       return bob_cryptobox.new_prekey(0);
-    })
-
-    .then((bob_serialized_pre_key_bundle) => {
+    }).then((bob_serialized_pre_key_bundle) => {
       return alice_cryptobox.session_from_prekey('bob_client_id', bob_serialized_pre_key_bundle);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_session.encrypt('Hello Bob!');
-    })
-
-    .then((msg) => {
+    }).then((msg) => {
       hello_bob = msg;
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
       assert_decrypt('Hello Bob!', plaintext);
       return bob_session.decrypt(hello_bob);
-    })
-
-    .then((msg) => {
+    }).then((msg) => {
       return assert.fail('', '', 'Session.decrypt should throw Proteus.errors.DecryptError.DuplicateMessage');
-    })
-
-    .catch((e) => {
+    }).catch((e) => {
       return assert.instanceOf(e, Proteus.errors.DecryptError.DuplicateMessage);
-    })
-
-    .then(() => done(), (err) => done(err));
+    }).then(() => done(), (err) => done(err));
   });
 
   return it('can delete a session', (done) => {
@@ -275,45 +201,27 @@ describe('Basic functionality', () => {
       alice_cryptobox = boxes[0];
       bob_cryptobox = boxes[1];
       return bob_cryptobox.new_prekey(0);
-    })
-
-    .then((bob_serialized_pre_key_bundle) => {
+    }).then((bob_serialized_pre_key_bundle) => {
       return alice_cryptobox.session_from_prekey('bob_client_id', bob_serialized_pre_key_bundle);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       alice_session = session;
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_session.encrypt('Hello Bob!');
-    })
-
-    .then((msg) => {
+    }).then((msg) => {
       hello_bob = msg;
       return bob_cryptobox.session_from_message('alice', hello_bob);
-    })
-
-    .then((session) => {
+    }).then((session) => {
       bob_session = session[0];
       plaintext = session[1];
       assert_decrypt('Hello Bob!', plaintext);
       return alice_cryptobox.session_save(alice_session);
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_cryptobox.session_delete('bob_client_id');
-    })
-
-    .then(() => {
+    }).then(() => {
       return alice_cryptobox.session_load('bob_client_id');
-    })
-
-    .then((session) => {
+    }).then((session) => {
       return assert.isNotOk(session);
-    })
-
-    .then(() => done(), (err) => done(err));
+    }).then(() => done(), (err) => done(err));
   });
 });
