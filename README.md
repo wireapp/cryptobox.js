@@ -1,3 +1,7 @@
+# :warning: Deprecation Notice :warning:
+
+This module is deprecated. Please use [wire-webapp-cryptobox](https://github.com/wireapp/wire-webapp-cryptobox).
+
 # Wire
 
 This repository is part of the source code of Wire. You can find more information at [wire.com](https://wire.com) or by contacting opensource@wire.com.
@@ -22,7 +26,3 @@ Run the following in your terminal / command shell:
 npm install
 npm test
 ```
-
-## :warning: Deprecation Notice :warning:
-
-This module is deprecated and will be soon replaced by [wire-webapp-cryptobox](https://github.com/wireapp/wire-webapp-cryptobox).
